@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 //Rotas de autenticação
-app.get('/sign-up', authRouter);
+app.post('/sign-up', authRouter);
 
 
 app.listen(5000, () => {

@@ -1,13 +1,31 @@
 import mongo from '../db/db.js';
-
+import bcrypt from 'bcrypt';
 
 
 let db = await mongo();
 
-function signIn (req, res) {
-    db.collection('users').find().toArray();
+async function signUp (req, res) {
+    const { name, email, password } = req.body;
 
-    res.status(200).send('OK')
+    try {
+        const user = await db.collection('users').findOne({email});
+
+        if(user) return res.status(409).send('Já existe um usuário com esse e-mail');
+
+        const passwordHash = bcrypt.hashSync(password, 10);
+
+        db.collection('users').insertOne(
+            {
+                name,
+                email,
+                password: passwordHash
+            }
+        );
+
+        res.status(201).send('OK');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 }
 
-export { signIn }
+export { signUp }
