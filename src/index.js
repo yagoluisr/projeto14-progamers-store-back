@@ -1,20 +1,15 @@
 import express from 'express';
 import cors from 'cors';
-import mongo from './db/db.js';
 
+import authRouter from './Routers/authRouters.js'
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-let db = await mongo();
-
-
-app.get('/status', (req, res) => {
-    db.collection('users').find().toArray();
-
-    res.status(200).send('OK')
-})
+//Rotas de autenticação
+app.get('/sign-up', authRouter);
 
 
 app.listen(5000, () => {
