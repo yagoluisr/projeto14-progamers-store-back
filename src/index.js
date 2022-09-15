@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-
+import productRoute from './Routers/productRoute.js'
 import authRouter from './Routers/authRouters.js'
 import { schemaSignIn, schemaSignUp } from './Middlewares/authMiddleware.js';
 
@@ -12,6 +12,7 @@ app.use(express.json());
 //Rotas de autenticação
 app.post('/sign-up', schemaSignUp, authRouter);
 app.post('/',schemaSignIn ,authRouter);
+app.use(productRoute);
 
 
 app.listen(5000, () => {

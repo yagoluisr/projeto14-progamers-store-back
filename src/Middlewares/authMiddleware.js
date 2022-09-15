@@ -1,5 +1,5 @@
 import joi from 'joi';
-
+import mongo from '../db/db.js';
 
 const signUpSchema = joi.object({
     name: joi.string().empty().required(),
@@ -41,4 +41,24 @@ function schemaSignIn (req, res, next) {
     next()
 }
 
-export { schemaSignUp, schemaSignIn };
+
+
+async function hasUser(req, res, next) {
+    const {authorization} = req.headers
+    const token = authorization?.replace("Bearer ", "")
+  try {
+    let db = await mongo();
+    const user = await db.collection('sessions').findOne({
+      token,
+    });
+    if (!user) {
+      return res.sendStatus(401);
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+}
+
+export { schemaSignUp, schemaSignIn ,hasUser};
