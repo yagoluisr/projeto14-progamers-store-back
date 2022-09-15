@@ -1,6 +1,6 @@
 import mongo from '../db/db.js';
 import bcrypt from 'bcrypt';
-
+import { v4 as uuid } from 'uuid';
 
 let db = await mongo();
 
@@ -29,15 +29,24 @@ async function signUp (req, res) {
 }
 
 async function signIn (req, res) {
-    const { email, password } = req.body;
+    const { email, password } = res.locals.user;
 
     try {
         const user = await db.collection('users').findOne({email});
 
-        if (!user) return res.status(404).send('E-mail não cadastrado');
+        if (user && bcrypt.compareSync(password, user.password)) {
+            const token = uuid();
 
+            await db.collection('sessions').insertOne({
+                name: user.name,
+                email,
+                token
+            });
 
-        res.status(200).send('OK');
+            return res.status(200).send(token);
+        } 
+        
+        res.status(404).send('E-mail e/ou senha inválido');
     } catch (error) {
         res.status(500).send(error.message)
     }
