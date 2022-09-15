@@ -1,22 +1,18 @@
 import express from 'express';
 import cors from 'cors';
-import mongo from './db/db.js';
 
+import authRouter from './Routers/authRouters.js'
+import { schemaSignUp } from './Middlewares/authMiddleware.js';
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-let db = await mongo();
-
-
-app.get('/status', (req, res) => {
-    db.collection('users').find().toArray();
-
-    res.status(200).send('OK')
-})
+//Rotas de autenticação
+app.post('/sign-up', schemaSignUp, authRouter);
 
 
 app.listen(5000, () => {
-    console.log('Listening on port 5000')
-})
+    console.log('Listening on port 5000');
+});
