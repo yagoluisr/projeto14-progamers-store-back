@@ -28,4 +28,19 @@ async function signUp (req, res) {
     }
 }
 
-export { signUp }
+async function signIn (req, res) {
+    const { email, password } = req.body;
+
+    try {
+        const user = await db.collection('users').findOne({email});
+
+        if (!user) return res.status(404).send('E-mail não cadastrado');
+
+
+        res.status(200).send('OK');
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
+
+export { signUp, signIn }

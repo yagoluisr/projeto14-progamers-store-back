@@ -11,6 +11,7 @@ app.use(express.json());
 
 //Rotas de autenticação
 app.post('/sign-up', schemaSignUp, authRouter);
+app.post('/', authRouter);
 
 
 app.listen(5000, () => {
