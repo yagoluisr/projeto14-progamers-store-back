@@ -43,7 +43,7 @@ async function signIn (req, res) {
                 token
             });
 
-            return res.status(200).send(token);
+            return res.status(200).send({token:token,name:user.name});
         } 
         
         res.status(404).send('E-mail e/ou senha inválido');
