@@ -12,6 +12,15 @@ const signInSchema = joi.object({
     password: joi.string().empty().required()
 });
 
+const CartSchema = joi.object({
+  username: joi.string().empty().required(),
+  adress: joi.string().empty().required(),
+  date: joi.string().empty().required(),
+  amount: joi.number().empty().required(),
+  products: joi.array().required()
+
+})
+
 
 function schemaSignUp (req, res, next) {
     const { name, email, password } = req.body;
@@ -61,4 +70,19 @@ async function hasUser(req, res, next) {
   }
 }
 
-export { schemaSignUp, schemaSignIn ,hasUser};
+function schemaCart (req, res, next) {
+  const { username, adress, amount, date, products } = req.body;
+
+  const validation = CartSchema.validate({ username, adress, amount, date, products }, {abortEarly: false});
+
+  if (validation.error) {
+      const error = validation.error.details.map(obj => obj.message)
+      return res.status(404).send(error);
+  }
+
+  res.locals.purchase = { username, adress, amount, date, products }
+
+  next()
+}
+
+export { schemaSignUp, schemaSignIn ,hasUser, schemaCart};

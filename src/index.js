@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import productRoute from './Routers/productRoute.js'
 import authRouter from './Routers/authRouters.js'
-import { schemaSignIn, schemaSignUp } from './Middlewares/authMiddleware.js';
+import { hasUser, schemaCart, schemaSignIn, schemaSignUp } from './Middlewares/authMiddleware.js';
+import cartRouter from './Routers/cartRouter.js';
 
 const app = express();
 
@@ -12,7 +13,11 @@ app.use(express.json());
 //Rotas de autenticação
 app.post('/sign-up', schemaSignUp, authRouter);
 app.post('/',schemaSignIn ,authRouter);
+
 app.use(productRoute);
+
+//Rota do carrinho
+app.post('/carrinho',hasUser, schemaCart, cartRouter)
 
 
 app.listen(5000, () => {
