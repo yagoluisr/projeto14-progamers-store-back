@@ -14,10 +14,11 @@ app.use(express.json());
 app.post('/sign-up', schemaSignUp, authRouter);
 app.post('/',schemaSignIn ,authRouter);
 
+//Rota de produtos
 app.use(productRoute);
 
 //Rota do carrinho
-app.post('/carrinho',hasUser, schemaCart, cartRouter)
+app.post('/cart',hasUser, schemaCart, cartRouter)
 
 
 app.listen(5000, () => {

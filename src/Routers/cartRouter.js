@@ -4,6 +4,6 @@ import { purchases } from '../Controllers/cartController.js';
 
 const router = express.Router();
 
-router.post('/carrinho', purchases)
+router.post('/cart', purchases)
 
 export default router;
