@@ -21,6 +21,6 @@ app.use(productRoute);
 app.post('/cart',hasUser, schemaCart, cartRouter)
 
 
-app.listen(5000, () => {
-    console.log('Listening on port 5000');
+app.listen(`${process.env.PORT}`, () => {
+    console.log(`Listening on port ${process.env.PORT}` );
 });
